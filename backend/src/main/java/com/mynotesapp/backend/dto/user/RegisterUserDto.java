@@ -18,9 +18,9 @@ public class RegisterUserDto {
     @Size(max = 255, message = "The field 'email' cannot be more than 255 symbols")
     private String email;
 
-    @NotBlank(message = "The field 'name' cannot be null or empty.")
+    @NotBlank(message = "The field 'fullName' cannot be null or empty.")
     @Size(max = 255, message = "The field 'name' cannot be more than 255 symbols")
-    private String name;
+    private String fullName;
 
     @NotBlank(message = "The field 'password' cannot be null or empty.")
     @Size(max = 100, message = "The field 'password' cannot be more than 100 symbols")

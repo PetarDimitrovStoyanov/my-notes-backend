@@ -18,8 +18,8 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 public class UpdateNoteDto {
 
-    @NotBlank(message = "The field 'id' cannot be null or empty")
-    private String id;
+    @NotBlank(message = "The field 'id' cannot be null")
+    private Long id;
 
     @Size(max = 5000, message = "The field 'title' cannot be more than 5000 symbol")
     @NotBlank(message = "The field 'title' cannot be null or empty")

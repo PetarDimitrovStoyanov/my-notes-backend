@@ -1,7 +1,11 @@
 server:
     port: 8080
 
+#  matching-strategy is important for spring security path matcher
 spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ANT_PATH_MATCHER
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
     password: "${MYSQL_PASSWORD:1234}"
@@ -9,10 +13,19 @@ spring:
     username: "${MYSQL_USER:root}"
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
-    defer-datasource-initialization: true
+#    liquidbase:
+    defer-datasource-initialization:
     hibernate:
       ddl-auto: update
     open-in-view: false
     properties:
       hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
         format_sql: true
+  liquibase:
+    change-log: classpath:db/changelog/changelog-master.xml
+    enabled: true
+
+token:
+  secret: fUjXn2r5u8x/A?D(B+KbPeSgVkYp2s6v9y$B&E)H@McQfTjWmZq489w!z%C*F-Ja
+  expiration_time: 3600000
