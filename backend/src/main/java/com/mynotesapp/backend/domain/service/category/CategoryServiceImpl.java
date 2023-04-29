@@ -10,7 +10,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -28,17 +27,17 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategoryDto getById(String id) {
+    public CategoryDto getById(Long id) {
         CategoryEntity categoryEntity = findById(id);
 
         return mapper.toDto(categoryEntity);
     }
 
     @Override
-    public CategoryEntity findById(String id) {
+    public CategoryEntity findById(Long id) {
 
         return categoryRepository
-                .findById(UUID.fromString(id))
+                .findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(id, CategoryEntity.class.getSimpleName()));
     }
 

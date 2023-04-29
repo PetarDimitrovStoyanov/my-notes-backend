@@ -17,8 +17,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 @RestController
 @AllArgsConstructor
@@ -28,7 +26,7 @@ public class NoteController {
     private final NoteService noteService;
 
     @GetMapping(ControllerApi.BY_USER)
-    public ResponseEntity<List<NoteDto>> getAllByUser(@PathVariable String id) {
+    public ResponseEntity<List<NoteDto>> getAllByUser(@PathVariable Long id) {
         List<NoteDto> notes = noteService.getAllByUser(id);
 
         return ResponseEntity.ok().body(notes);
@@ -49,7 +47,7 @@ public class NoteController {
     }
 
     @DeleteMapping(ControllerApi.DELETE)
-    public ResponseEntity<?> delete(@PathVariable String noteId, @PathVariable String ownerId) {
+    public ResponseEntity<?> delete(@PathVariable Long noteId, @PathVariable Long ownerId) {
         noteService.delete(noteId, ownerId);
 
         return new ResponseEntity<>(HttpStatus.OK);
@@ -59,14 +57,14 @@ public class NoteController {
     public ResponseEntity<List<NoteDto>> search(
             @RequestParam(name = "text", required = false) String searchText,
             @RequestParam(value = "isImportant", required = false) Boolean isImportant,
-            @RequestParam(value = "categories", required = false) List<String> categories,
+            @RequestParam(value = "categories", required = false) List<Long> categories,
             @SortDefault(sort = "orderNumber", direction = Sort.Direction.DESC) Sort sort,
             @PageableDefault(size = Integer.MAX_VALUE) Pageable pageable
     ) {
         List<NoteDto> notes = noteService.search(SearchNoteCriteriaDto.builder()
                 .searchText(searchText)
                 .isImportant(isImportant)
-                .categories(noteService.convertCategoryIds(categories))
+                .categories(categories)
                 .pageable(pageable)
                 .sort(sort)
                 .build()

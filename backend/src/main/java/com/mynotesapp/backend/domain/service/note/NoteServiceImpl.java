@@ -17,11 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -31,13 +27,13 @@ public class NoteServiceImpl implements NoteService {
 
     private final NoteMapper mapper;
 
-    private final UserService userService;
-
-    private final CategoryService categoryService;
+//    private final UserService userService;
+//
+//    private final CategoryService categoryService;
 
     @Override
-    public List<NoteDto> getAllByUser(String id) {
-        List<NoteEntity> notes = noteRepository.findAllByOwnerId(UUID.fromString(id));
+    public List<NoteDto> getAllByUser(Long id) {
+        List<NoteEntity> notes = noteRepository.findAllByOwnerId(id);
 
         return mapper.toListDtos(notes);
     }
@@ -46,9 +42,9 @@ public class NoteServiceImpl implements NoteService {
     @Transactional
     public NoteDto create(CreateNoteDto createNoteDto) {
         NoteEntity note = mapper.toEntity(createNoteDto);
-        note.setOwner(userService.findById(createNoteDto.getOwner().getId()));
-        note.setCategory(categoryService.findById(createNoteDto.getCategory().getId()));
-        note.setCreatedDate(LocalDateTime.now());
+//        note.setOwner(userService.findById(createNoteDto.getOwner().getId()));
+//        note.setCategory(categoryService.findById(createNoteDto.getCategory().getId()));
+//        note.setCreatedDate(LocalDateTime.now());
 
         return mapper.toDto(noteRepository.save(note));
     }
@@ -56,19 +52,15 @@ public class NoteServiceImpl implements NoteService {
     @Override
     @Transactional
     public NoteDto update(UpdateNoteDto updateDto) {
-        UUID noteId = UUID.fromString(updateDto.getId());
-        UUID ownerId = UUID.fromString(updateDto.getOwner().getId());
-        NoteEntity noteEntity = getNoteEntityByIdAndOwner(noteId, ownerId);
+        NoteEntity noteEntity = getNoteEntityByIdAndOwner(updateDto.getId(), updateDto.getOwner().getId());
         mapper.updateNoteFromDto(updateDto, noteEntity);
 
         return mapper.toDto(noteRepository.save(noteEntity));
     }
 
     @Override
-    public void delete(String noteId, String ownerId) {
-        UUID noteEntityId = UUID.fromString(noteId);
-        UUID ownerEntityId = UUID.fromString(ownerId);
-        NoteEntity noteEntity = getNoteEntityByIdAndOwner(noteEntityId, ownerEntityId);
+    public void delete(Long noteId, Long ownerId) {
+        NoteEntity noteEntity = getNoteEntityByIdAndOwner(noteId, ownerId);
 
         noteRepository.delete(noteEntity);
     }
@@ -83,18 +75,10 @@ public class NoteServiceImpl implements NoteService {
         return mapper.toListDtos(notes.getContent());
     }
 
-    @Override
-    public List<UUID> convertCategoryIds(List<String> categories) {
-
-        return Objects.nonNull(categories) && !categories.isEmpty()
-                ? categories.stream().map(UUID::fromString).collect(Collectors.toList())
-                : null;
-    }
-
-    private NoteEntity getNoteEntityByIdAndOwner(UUID noteId, UUID ownerId) {
+    private NoteEntity getNoteEntityByIdAndOwner(Long noteId, Long ownerId) {
 
         return noteRepository
                 .findByIdAndOwnerId(noteId, ownerId)
-                .orElseThrow(() -> new EntityNotFoundException(noteId.toString(), NoteEntity.class.getSimpleName()));
+                .orElseThrow(() -> new EntityNotFoundException(noteId, NoteEntity.class.getSimpleName()));
     }
 }

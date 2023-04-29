@@ -13,8 +13,8 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 public class CategoryDto {
 
-    @NotBlank(message = "The field 'id' cannot be null or empty")
-    private String id;
+    @NotBlank(message = "The field 'id' cannot be null")
+    private Long id;
 
     private String name;
 }

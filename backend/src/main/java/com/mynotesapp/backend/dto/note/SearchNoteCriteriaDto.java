@@ -5,7 +5,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 import java.util.List;
-import java.util.UUID;
 
 @Getter
 @Setter
@@ -18,7 +17,7 @@ public class SearchNoteCriteriaDto {
 
     private Boolean isImportant;
 
-    private List<UUID> categories;
+    private List<Long> categories;
 
     private Pageable pageable;
 

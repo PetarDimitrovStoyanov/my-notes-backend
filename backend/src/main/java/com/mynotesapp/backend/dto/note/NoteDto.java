@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class NoteDto {
 
-    private String id;
+    private Long id;
 
     private String title;
 

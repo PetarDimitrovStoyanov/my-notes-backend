@@ -9,9 +9,9 @@ import java.util.List;
 public interface CategoryService {
     CategoryDto create(CrateCategoryDto categoryDto);
 
-    CategoryDto getById(String id);
+    CategoryDto getById(Long id);
 
     List<CategoryDto> getAll();
 
-    CategoryEntity findById(String id);
+    CategoryEntity findById(Long id);
 }

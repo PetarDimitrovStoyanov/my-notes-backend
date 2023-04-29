@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.net.URI;
 
 @RestController
 @AllArgsConstructor
@@ -31,6 +30,13 @@ public class UserController {
     public ResponseEntity<UserDto> login(@Valid @RequestBody LoginDto loginDto) {
         UserDto user = userService.login(loginDto);
 
-        return new ResponseEntity<>(user, HttpStatus.CREATED);
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
+    @GetMapping(ControllerApi.LOGOUT)
+    public ResponseEntity<?> logout() {
+        userService.logout();
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
