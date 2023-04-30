@@ -22,7 +22,7 @@ public class NoteDto {
 
     private Boolean isImportant;
 
-    private Long orderNumber;
+    private LocalDateTime orderDateTime;
 
     private LocalDateTime createdDate;
 

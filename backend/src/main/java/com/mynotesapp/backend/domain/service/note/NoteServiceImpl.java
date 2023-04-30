@@ -2,12 +2,7 @@ package com.mynotesapp.backend.domain.service.note;
 
 import com.mynotesapp.backend.domain.entity.NoteEntity;
 import com.mynotesapp.backend.domain.repository.NoteRepository;
-import com.mynotesapp.backend.domain.service.category.CategoryService;
-import com.mynotesapp.backend.domain.service.user.UserService;
-import com.mynotesapp.backend.dto.note.CreateNoteDto;
-import com.mynotesapp.backend.dto.note.NoteDto;
-import com.mynotesapp.backend.dto.note.SearchNoteCriteriaDto;
-import com.mynotesapp.backend.dto.note.UpdateNoteDto;
+import com.mynotesapp.backend.dto.note.*;
 import com.mynotesapp.backend.exception.EntityNotFoundException;
 import com.mynotesapp.backend.mapper.NoteMapper;
 import lombok.AllArgsConstructor;
@@ -16,7 +11,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -27,13 +21,9 @@ public class NoteServiceImpl implements NoteService {
 
     private final NoteMapper mapper;
 
-//    private final UserService userService;
-//
-//    private final CategoryService categoryService;
-
     @Override
     public List<NoteDto> getAllByUser(Long id) {
-        List<NoteEntity> notes = noteRepository.findAllByOwnerId(id);
+        List<NoteEntity> notes = noteRepository.findAllByOwnerIdOrderByOrderDateTimeDesc(id);
 
         return mapper.toListDtos(notes);
     }
@@ -42,9 +32,6 @@ public class NoteServiceImpl implements NoteService {
     @Transactional
     public NoteDto create(CreateNoteDto createNoteDto) {
         NoteEntity note = mapper.toEntity(createNoteDto);
-//        note.setOwner(userService.findById(createNoteDto.getOwner().getId()));
-//        note.setCategory(categoryService.findById(createNoteDto.getCategory().getId()));
-//        note.setCreatedDate(LocalDateTime.now());
 
         return mapper.toDto(noteRepository.save(note));
     }
@@ -54,11 +41,13 @@ public class NoteServiceImpl implements NoteService {
     public NoteDto update(UpdateNoteDto updateDto) {
         NoteEntity noteEntity = getNoteEntityByIdAndOwner(updateDto.getId(), updateDto.getOwner().getId());
         mapper.updateNoteFromDto(updateDto, noteEntity);
+        NoteEntity updatedEntity = noteRepository.save(noteEntity);
 
-        return mapper.toDto(noteRepository.save(noteEntity));
+        return mapper.toDto(updatedEntity);
     }
 
     @Override
+    @Transactional
     public void delete(Long noteId, Long ownerId) {
         NoteEntity noteEntity = getNoteEntityByIdAndOwner(noteId, ownerId);
 
@@ -73,6 +62,16 @@ public class NoteServiceImpl implements NoteService {
         Page<NoteEntity> notes = noteRepository.findAll(specification, pageable);
 
         return mapper.toListDtos(notes.getContent());
+    }
+
+    @Override
+    @Transactional
+    public NoteDto updateOnDrag(UpdateOnDragDto updateDto) {
+        NoteEntity noteEntity = getNoteEntityByIdAndOwner(updateDto.getId(), updateDto.getOwner().getId());
+        mapper.updateNoteFromDragDto(updateDto, noteEntity);
+        NoteEntity updatedEntity = noteRepository.save(noteEntity);
+
+        return mapper.toDto(updatedEntity);
     }
 
     private NoteEntity getNoteEntityByIdAndOwner(Long noteId, Long ownerId) {

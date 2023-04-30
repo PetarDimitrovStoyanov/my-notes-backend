@@ -1,13 +1,13 @@
 package com.mynotesapp.backend.jwt;
 
-import com.mynotesapp.backend.domain.entity.UserEntity;
-import com.mynotesapp.backend.dto.user.UserDto;
+import com.mynotesapp.backend.exception.TokenNotValidException;
+import com.mynotesapp.backend.util.Constants;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import lombok.AllArgsConstructor;
-import org.springframework.core.env.Environment;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -19,13 +19,17 @@ import java.util.Date;
 import java.util.function.Function;
 
 @Component
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class JwtToken {
 
-    private final Environment environment;
+    @Value("${token.secret}")
+    private String tokenSecret;
+
+    @Value("${token.expiration_time}")
+    private long tokenExpirationTime;
 
     public String generateByUserCredentials(String email) {
-        long expirationTime = getExpirationTime();
+        long expirationTime = tokenExpirationTime;
         Instant now = Instant.now();
         SecretKey secretKey = getSecretKey();
 
@@ -38,16 +42,9 @@ public class JwtToken {
     }
 
     private SecretKey getSecretKey() {
-//        String secret = environment.getProperty(environment.getProperty("token.secret"));
-        String secret = "fUjXn2r5u8x/A?D(B+KbPeSgVkYp2s6v9y$B&E)H@McQfTjWmZq489w!z%C*F-Ja";
-        byte[] secretBytes = Base64.getEncoder().encode(secret.getBytes());
+        byte[] secretBytes = Base64.getEncoder().encode(tokenSecret.getBytes());
 
         return new SecretKeySpec(secretBytes, SignatureAlgorithm.HS512.getJcaName());
-    }
-
-    private Long getExpirationTime() {
-//        return Long.parseLong(environment.getProperty("token.expiration_time"));
-        return Long.parseLong("3600000");
     }
 
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
@@ -60,11 +57,15 @@ public class JwtToken {
     }
 
     public String extractUsername(String token) {
-        return extractClaim(token, Claims::getSubject);
+        return extractClaim(token.trim(), Claims::getSubject);
     }
 
     public Date extractExpiration(String token) {
-        return extractClaim(token, Claims::getExpiration);
+        try {
+            return extractClaim(token, Claims::getExpiration);
+        } catch (Exception exception) {
+            throw new TokenNotValidException(token);
+        }
     }
 
     private Boolean isTokenExpired(String token) {
@@ -74,5 +75,14 @@ public class JwtToken {
     public Boolean validateToken(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+    }
+
+    public HttpHeaders addTokenHeader(String email) {
+        HttpHeaders headers = new HttpHeaders();
+        String token = generateByUserCredentials(email);
+        headers.set(Constants.AUTHORIZATION, String.format("%s%s", Constants.BEARER_SPACE, token));
+        headers.set(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, Constants.AUTHORIZATION);
+
+        return headers;
     }
 }

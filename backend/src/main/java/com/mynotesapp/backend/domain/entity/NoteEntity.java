@@ -25,9 +25,11 @@ public class NoteEntity extends BaseEntity {
     @Column(name = "is_important", nullable = false, columnDefinition = "boolean default false")
     private Boolean isImportant;
 
+    @Column(name = "created_date")
     private LocalDateTime createdDate;
 
-    private Long orderNumber;
+    @Column(name = "order_date_time")
+    private LocalDateTime orderDateTime;
 
     @ManyToOne
     @JoinColumn(name="category_id", nullable=false)
