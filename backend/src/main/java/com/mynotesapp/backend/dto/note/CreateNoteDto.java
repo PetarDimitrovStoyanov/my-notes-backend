@@ -34,7 +34,4 @@ public class CreateNoteDto {
 
     @NotNull(message = "The field 'owner' cannot be null")
     private @Valid CategoryDto category;
-
-    @NotNull(message = "The field 'orderNumber' cannot be null")
-    private Long orderNumber;
 }

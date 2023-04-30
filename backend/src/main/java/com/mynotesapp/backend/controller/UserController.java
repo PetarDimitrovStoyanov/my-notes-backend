@@ -4,7 +4,10 @@ import com.mynotesapp.backend.domain.service.user.UserService;
 import com.mynotesapp.backend.dto.user.LoginDto;
 import com.mynotesapp.backend.dto.user.RegisterUserDto;
 import com.mynotesapp.backend.dto.user.UserDto;
-import com.mynotesapp.backend.util.ControllerApi;
+import com.mynotesapp.backend.jwt.JwtToken;
+import com.mynotesapp.backend.util.Constants;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,28 +17,32 @@ import javax.validation.Valid;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping(ControllerApi.BACKEND + ControllerApi.USERS)
+@RequestMapping(Constants.BACKEND + Constants.USERS)
 public class UserController {
 
     private final UserService userService;
 
-    @PostMapping(ControllerApi.REGISTER)
+    private final JwtToken jwtToken;
+
+    @PostMapping(Constants.REGISTER)
     public ResponseEntity<UserDto> register(@Valid @RequestBody RegisterUserDto registerDto) {
         UserDto user = userService.register(registerDto);
 
         return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
 
-    @PostMapping(ControllerApi.LOGIN)
+    @PostMapping(Constants.LOGIN)
     public ResponseEntity<UserDto> login(@Valid @RequestBody LoginDto loginDto) {
         UserDto user = userService.login(loginDto);
 
-        return new ResponseEntity<>(user, HttpStatus.OK);
+        return ResponseEntity.ok()
+                .headers(jwtToken.addTokenHeader(user.getEmail()))
+                .body(user);
     }
 
-    @GetMapping(ControllerApi.LOGOUT)
-    public ResponseEntity<?> logout() {
-        userService.logout();
+    @GetMapping(Constants.LOGOUT)
+    public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response) {
+        userService.logout(request, response);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

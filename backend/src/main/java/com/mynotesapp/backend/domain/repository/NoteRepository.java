@@ -10,7 +10,7 @@ import java.util.Optional;
 
 @Repository
 public interface NoteRepository extends JpaRepository<NoteEntity, Long>, JpaSpecificationExecutor<NoteEntity> {
-    List<NoteEntity> findAllByOwnerId(Long id);
+    List<NoteEntity> findAllByOwnerIdOrderByOrderDateTimeDesc(Long id);
 
     Optional<NoteEntity> findByIdAndOwnerId(Long id, Long ownerId);
 }

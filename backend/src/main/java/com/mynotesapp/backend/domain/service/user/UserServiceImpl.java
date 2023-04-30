@@ -12,6 +12,8 @@ import com.mynotesapp.backend.exception.UserNotFoundException;
 import com.mynotesapp.backend.exception.UserRegisteredException;
 import com.mynotesapp.backend.mapper.UserMapper;
 import com.mynotesapp.backend.util.RoleEnum;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
@@ -21,6 +23,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -83,11 +86,6 @@ public class UserServiceImpl implements UserService {
         return mapper.toDto(user);
     }
 
-    @Override
-    public void logout() {
-
-    }
-
     private void setAuthenticationContext(UserEntity user) {
         UserDetails userDetails = loadUserByUsername(user.getEmail());
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
@@ -123,5 +121,11 @@ public class UserServiceImpl implements UserService {
                 true,
                 true,
                 grantedAuthorities);
+    }
+
+    @Override
+    public void logout(HttpServletRequest request, HttpServletResponse response) {
+        SecurityContextLogoutHandler securityContextLogoutHandler = new SecurityContextLogoutHandler();
+        securityContextLogoutHandler.logout(request, response, null);
     }
 }
