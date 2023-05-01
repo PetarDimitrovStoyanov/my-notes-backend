@@ -20,6 +20,10 @@ public class SearchNoteSpecification implements Specification<NoteEntity> {
     public Predicate toPredicate(Root<NoteEntity> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
         List<Predicate> predicates = new ArrayList<>();
 
+        predicates.add(
+                criteriaBuilder.and(criteriaBuilder.equal(root.join("owner").get("id"), criteria.getOwnerId()))
+        );
+
         if (criteria.getSearchText() != null && !criteria.getSearchText().trim().equals("")) {
             predicates.add(criteriaBuilder.or(
                     getPredicate(criteriaBuilder, root.get("text")),
