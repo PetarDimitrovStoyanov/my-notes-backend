@@ -5,7 +5,6 @@ import com.mynotesapp.backend.domain.entity.NoteEntity;
 import com.mynotesapp.backend.dto.note.CreateNoteDto;
 import com.mynotesapp.backend.dto.note.NoteDto;
 import com.mynotesapp.backend.dto.note.UpdateNoteDto;
-import com.mynotesapp.backend.dto.note.UpdateOnDragDto;
 import org.mapstruct.*;
 
 import java.time.LocalDateTime;
@@ -18,12 +17,20 @@ public interface NoteMapper {
     List<NoteDto> toListDtos(List<NoteEntity> notes);
 
     @Mapping(target = "createdDate", expression = "java(getDateTime())")
-    @Mapping(target = "orderDateTime", expression = "java(getDateTime())")
+    @Mapping(target = "orderNumber", expression = "java(getOrderNumber())")
     NoteEntity toEntity(CreateNoteDto createNoteDto);
+
+    @Mapping(target = "owner", ignore = true)
+    List<NoteEntity> toEntities(List<UpdateNoteDto> dtos);
 
     @Named("getDateTime")
     default LocalDateTime getDateTime() {
         return LocalDateTime.now();
+    }
+
+    @Named("getOrderNumber")
+    default Long getOrderNumber() {
+        return -1L;
     }
 
     NoteEntity toEntity(UpdateNoteDto updateNoteDto);
@@ -41,27 +48,5 @@ public interface NoteMapper {
         categoryEntity.setId(dto.getCategory().getId());
 
         return categoryEntity;
-    }
-
-    @Mapping(target = "owner", ignore = true)
-    @Mapping(target = "category", expression = "java(getCategoryDrag(updateDto))")
-    @Mapping(target = "orderDateTime", expression = "java(getIncrementTime(updateDto))")
-    void updateNoteFromDragDto(UpdateOnDragDto updateDto, @MappingTarget NoteEntity noteEntity);
-
-    @Named("getCategoryDrag")
-    default CategoryEntity getCategoryDrag(UpdateOnDragDto updateDto) {
-        CategoryEntity categoryEntity = new CategoryEntity();
-        categoryEntity.setName(updateDto.getCategory().getName());
-        categoryEntity.setId(updateDto.getCategory().getId());
-
-        return categoryEntity;
-    }
-
-    @Named("getIncrementTime")
-    default LocalDateTime getIncrementTime(UpdateOnDragDto updateDto) {
-
-        return updateDto.getIsIncrement()
-                ? updateDto.getOrderDateTime().plusSeconds(1)
-                : updateDto.getOrderDateTime().minusSeconds(1);
     }
 }

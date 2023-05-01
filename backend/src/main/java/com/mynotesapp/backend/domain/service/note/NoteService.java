@@ -14,5 +14,5 @@ public interface NoteService {
 
     List<NoteDto> search(SearchNoteCriteriaDto criteria);
 
-    NoteDto updateOnDrag(UpdateOnDragDto updateDto);
+    List<NoteDto> updateOnDrag(List<UpdateNoteDto> updateDto);
 }

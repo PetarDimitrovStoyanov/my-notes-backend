@@ -63,12 +63,11 @@ public class NoteServiceImpl implements NoteService {
 
     @Override
     @Transactional
-    public NoteDto updateOnDrag(UpdateOnDragDto updateDto) {
-        NoteEntity noteEntity = getNoteEntityByIdAndOwner(updateDto.getId(), updateDto.getOwner().getId());
-        mapper.updateNoteFromDragDto(updateDto, noteEntity);
-        NoteEntity updatedEntity = noteRepository.save(noteEntity);
+    public List<NoteDto> updateOnDrag(List<UpdateNoteDto> dtos) {
+        List<NoteEntity> entities = mapper.toEntities(dtos);
+        List<NoteEntity> noteEntities = noteRepository.saveAll(entities);
 
-        return mapper.toDto(updatedEntity);
+        return mapper.toListDtos(noteEntities);
     }
 
     private NoteEntity getNoteEntityByIdAndOwner(Long noteId, Long ownerId) {

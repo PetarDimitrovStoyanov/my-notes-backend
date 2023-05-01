@@ -28,8 +28,7 @@ public class NoteEntity extends BaseEntity {
     @Column(name = "created_date")
     private LocalDateTime createdDate;
 
-    @Column(name = "order_date_time")
-    private LocalDateTime orderDateTime;
+    private Long orderNumber;
 
     @ManyToOne
     @JoinColumn(name="category_id", nullable=false)
