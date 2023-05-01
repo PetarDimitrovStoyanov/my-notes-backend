@@ -11,7 +11,6 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -39,6 +38,6 @@ public class UpdateNoteDto {
     @NotNull(message = "The field 'category' cannot be null")
     private @Valid CategoryDto category;
 
-    @NotNull(message = "The field 'orderDateTime' cannot be null")
-    private LocalDateTime orderDateTime;
+    @NotNull(message = "The field 'orderNumber' cannot be null")
+    private Long orderNumber;
 }

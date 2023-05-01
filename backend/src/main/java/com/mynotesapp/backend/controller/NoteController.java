@@ -49,7 +49,10 @@ public class NoteController {
             @RequestParam(value = "isImportant", required = false) Boolean isImportant,
             @RequestParam(value = "categories", required = false) List<Long> categories,
             @RequestParam(value = "ownerId", required = false) Long ownerId,
-            @SortDefault(sort = "orderDateTime", direction = Sort.Direction.DESC) Sort sort,
+            @SortDefault.SortDefaults({
+                    @SortDefault(sort = "orderNumber", direction = Sort.Direction.ASC),
+                    @SortDefault(sort = "id", direction = Sort.Direction.DESC)
+            }) Sort sort,
             @PageableDefault(size = Integer.MAX_VALUE) Pageable pageable
     ) {
         List<NoteDto> notes = noteService.search(SearchNoteCriteriaDto.builder()
@@ -66,8 +69,8 @@ public class NoteController {
     }
 
     @PatchMapping(Constants.UPDATE_ON_DRAG)
-    public ResponseEntity<NoteDto> updateOnDrag(@Valid @RequestBody UpdateOnDragDto updateDto) {
-        NoteDto note = noteService.updateOnDrag(updateDto);
+    public ResponseEntity<List<NoteDto>> updateOnDrag(@RequestBody List<@Valid UpdateNoteDto> notes) {
+        List<NoteDto> note = noteService.updateOnDrag(notes);
 
         return new ResponseEntity<>(note, HttpStatus.OK);
     }

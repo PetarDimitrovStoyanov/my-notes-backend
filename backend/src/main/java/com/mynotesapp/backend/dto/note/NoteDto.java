@@ -1,6 +1,7 @@
 package com.mynotesapp.backend.dto.note;
 
 import com.mynotesapp.backend.dto.category.CategoryDto;
+import com.mynotesapp.backend.dto.user.UserDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,7 +23,9 @@ public class NoteDto {
 
     private Boolean isImportant;
 
-    private LocalDateTime orderDateTime;
+    private Long orderNumber;
+
+    private UserDto owner;
 
     private LocalDateTime createdDate;
 
