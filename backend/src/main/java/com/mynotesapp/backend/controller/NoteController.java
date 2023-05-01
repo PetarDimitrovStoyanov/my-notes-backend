@@ -22,13 +22,6 @@ public class NoteController {
 
     private final NoteService noteService;
 
-    @GetMapping(Constants.BY_USER)
-    public ResponseEntity<List<NoteDto>> getAllByUser(@PathVariable Long id) {
-        List<NoteDto> notes = noteService.getAllByUser(id);
-
-        return ResponseEntity.ok().body(notes);
-    }
-
     @PostMapping(Constants.CREATE)
     public ResponseEntity<NoteDto> create(@Valid @RequestBody CreateNoteDto createNoteDto) {
         NoteDto note = noteService.create(createNoteDto);
@@ -55,13 +48,15 @@ public class NoteController {
             @RequestParam(name = "text", required = false) String searchText,
             @RequestParam(value = "isImportant", required = false) Boolean isImportant,
             @RequestParam(value = "categories", required = false) List<Long> categories,
-            @SortDefault(sort = "orderNumber", direction = Sort.Direction.DESC) Sort sort,
+            @RequestParam(value = "ownerId", required = false) Long ownerId,
+            @SortDefault(sort = "orderDateTime", direction = Sort.Direction.DESC) Sort sort,
             @PageableDefault(size = Integer.MAX_VALUE) Pageable pageable
     ) {
         List<NoteDto> notes = noteService.search(SearchNoteCriteriaDto.builder()
                 .searchText(searchText)
                 .isImportant(isImportant)
                 .categories(categories)
+                .ownerId(ownerId)
                 .pageable(pageable)
                 .sort(sort)
                 .build()

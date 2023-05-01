@@ -19,6 +19,8 @@ public class SearchNoteCriteriaDto {
 
     private List<Long> categories;
 
+    private Long ownerId;
+
     private Pageable pageable;
 
     private Sort sort;

@@ -7,7 +7,7 @@ import com.mynotesapp.backend.exception.EntityNotFoundException;
 import com.mynotesapp.backend.mapper.NoteMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,13 +20,6 @@ public class NoteServiceImpl implements NoteService {
     private final NoteRepository noteRepository;
 
     private final NoteMapper mapper;
-
-    @Override
-    public List<NoteDto> getAllByUser(Long id) {
-        List<NoteEntity> notes = noteRepository.findAllByOwnerIdOrderByOrderDateTimeDesc(id);
-
-        return mapper.toListDtos(notes);
-    }
 
     @Override
     @Transactional
@@ -58,8 +51,12 @@ public class NoteServiceImpl implements NoteService {
     @Transactional(readOnly = true)
     public List<NoteDto> search(SearchNoteCriteriaDto criteria) {
         SearchNoteSpecification specification = new SearchNoteSpecification(criteria);
-        Pageable pageable = criteria.getPageable();
-        Page<NoteEntity> notes = noteRepository.findAll(specification, pageable);
+        PageRequest of = PageRequest.of(
+                criteria.getPageable().getPageNumber(),
+                criteria.getPageable().getPageSize(),
+                criteria.getSort()
+        );
+        Page<NoteEntity> notes = noteRepository.findAll(specification, of);
 
         return mapper.toListDtos(notes.getContent());
     }

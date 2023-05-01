@@ -5,7 +5,6 @@ import com.mynotesapp.backend.dto.note.*;
 import java.util.List;
 
 public interface NoteService {
-    List<NoteDto> getAllByUser(Long id);
 
     NoteDto create(CreateNoteDto createNoteDto);
 
