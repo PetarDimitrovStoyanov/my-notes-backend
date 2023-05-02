@@ -48,8 +48,8 @@ public class WebSecurity {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(List.of(
                         "http://localhost:3000",
-                        "my-notes-app-frontend.vercel.app",
-                        "my-notes-app-frontend-git-master-petardimitrovstoyanov.vercel.app/",
+                        "https://my-notes-app-frontend.vercel.app",
+                        "https://my-notes-app-frontend-git-master-petardimitrovstoyanov.vercel.app/",
                         "https://my-notes-app-frontend-eyd0nkj5x-petardimitrovstoyanov.vercel.app/",
                         "https://my-notes-app-frontend-6u4vu4irj-petardimitrovstoyanov.vercel.app/"
                 )
