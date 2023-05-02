@@ -8,9 +8,13 @@ spring:
       matching-strategy: ANT_PATH_MATCHER
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
-    password: "${MYSQL_PASSWORD:1234}"
-    url: jdbc:mysql://${MYSQL_HOST:localhost}:3307/my-notes-db?allowPublicKeyRetrieval=true&useSSL=false&createDatabaseIfNotExist=true&serverTimezone=UTC
-    username: "${MYSQL_USER:root}"
+    password: 7nB0hJZaehaXzuxdn0NB
+    url: jdbc:mysql://containers-us-west-2.railway.app:6658/railway?allowPublicKeyRetrieval=true&useSSL=false&createDatabaseIfNotExist=true&serverTimezone=UTC
+    username: root
+#    Docker"
+#    password: "${MYSQL_PASSWORD:1234}"
+#    url: jdbc:mysql://${MYSQL_HOST:localhost}:3307/my-notes-db?allowPublicKeyRetrieval=true&useSSL=false&createDatabaseIfNotExist=true&serverTimezone=UTC
+#    username: "${MYSQL_USER:root}"
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
 #    liquidbase:
