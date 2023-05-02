@@ -46,7 +46,14 @@ public class WebSecurity {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:3000", "https://my-notes-app-frontend-6u4vu4irj-petardimitrovstoyanov.vercel.app/"));
+        configuration.setAllowedOrigins(List.of(
+                        "http://localhost:3000",
+                        "my-notes-app-frontend.vercel.app",
+                        "my-notes-app-frontend-git-master-petardimitrovstoyanov.vercel.app/",
+                        "https://my-notes-app-frontend-eyd0nkj5x-petardimitrovstoyanov.vercel.app/",
+                        "https://my-notes-app-frontend-6u4vu4irj-petardimitrovstoyanov.vercel.app/"
+                )
+        );
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         configuration.setAllowCredentials(true);
         configuration.addExposedHeader("Access-Control-Allow-Headers");
