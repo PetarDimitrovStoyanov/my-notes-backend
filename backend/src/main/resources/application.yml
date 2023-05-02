@@ -8,13 +8,9 @@ spring:
       matching-strategy: ANT_PATH_MATCHER
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
-    password: 7nB0hJZaehaXzuxdn0NB
-    url: jdbc:mysql://containers-us-west-2.railway.app:6658/railway?allowPublicKeyRetrieval=true&useSSL=false&createDatabaseIfNotExist=true&serverTimezone=UTC
-    username: root
-#    Docker"
-#    password: "${MYSQL_PASSWORD:1234}"
-#    url: jdbc:mysql://${MYSQL_HOST:localhost}:3307/my-notes-db?allowPublicKeyRetrieval=true&useSSL=false&createDatabaseIfNotExist=true&serverTimezone=UTC
-#    username: "${MYSQL_USER:root}"
+    username: "${MYSQL_USER}"
+    password: "${MYSQL_PASSWORD}"
+    url: jdbc:mysql://${MYSQL_HOST:localhost}:${MYSQL_PORT}/${MYSQL_DB_NAME:my-notes-db}?allowPublicKeyRetrieval=true&useSSL=false&createDatabaseIfNotExist=true&serverTimezone=UTC
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
 #    liquidbase:
@@ -30,5 +26,5 @@ spring:
     change-log: classpath:db/changelog/changelog-master.xml
     enabled: true
 token:
-  secret: fUjXn2r5u8x/A?D(B+KbPeSgVkYp2s6v9y$B&E)H@McQfTjWmZq489w!z%C*F-Ja
-  expiration_time: 604800000
+  secret: "${TOKEN_SECRET}"
+  expiration_time: "${TOKEN_EXPIRATION_TIME:604800000}"

@@ -28,7 +28,9 @@ public class UserController {
     public ResponseEntity<UserDto> register(@Valid @RequestBody RegisterUserDto registerDto) {
         UserDto user = userService.register(registerDto);
 
-        return new ResponseEntity<>(user, HttpStatus.CREATED);
+        return ResponseEntity.ok()
+                .headers(jwtToken.addTokenHeader(user.getEmail()))
+                .body(user);
     }
 
     @PostMapping(Constants.LOGIN)
