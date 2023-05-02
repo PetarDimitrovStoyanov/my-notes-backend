@@ -22,7 +22,7 @@ public class UserEntity extends BaseEntity {
     @Column(name = "full_name", columnDefinition = "VARCHAR(255)", nullable = false)
     private String fullName;
 
-    @Column(columnDefinition = "VARCHAR(100)")
+    @Column(columnDefinition = "VARCHAR(100)", nullable = false)
     private String password;
 
     @OneToMany(mappedBy="owner")

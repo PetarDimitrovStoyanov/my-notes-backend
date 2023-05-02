@@ -56,14 +56,16 @@ public class UserServiceImpl implements UserService {
         setUserRoles(userEntity);
         userEntity.setPassword(encryptPassword(registerDto.getPassword()));
 
-        return mapper.toDto(userRepository.save(userEntity));
+        UserEntity user = userRepository.save(userEntity);
+        setAuthenticationContext(user);
+
+        return mapper.toDto(user);
     }
 
     private String encryptPassword(String password) {
 
         return passwordEncoder.encode(password);
     }
-
 
     private void setUserRoles(UserEntity userEntity) {
         RoleEntity role = roleRepository
