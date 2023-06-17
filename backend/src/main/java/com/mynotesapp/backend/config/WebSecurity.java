@@ -47,11 +47,11 @@ public class WebSecurity {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(List.of(
-                        "http://localhost:3000",
-                        "https://my-notes-app-frontend.vercel.app",
-                        "https://my-notes-app-frontend-git-master-petardimitrovstoyanov.vercel.app/",
-                        "https://my-notes-app-frontend-eyd0nkj5x-petardimitrovstoyanov.vercel.app/",
-                        "https://my-notes-app-frontend-6u4vu4irj-petardimitrovstoyanov.vercel.app/"
+                        "http://localhost:7000",
+                        "http://localhost:8001",
+                        "http://192.168.0.118:7000",
+                        "http://192.168.0.118:8001",
+                        "https://my-notes.nuvellia.com"
                 )
         );
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));

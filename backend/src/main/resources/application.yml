@@ -1,5 +1,5 @@
 server:
-    port: 8080
+    port: 7000
 
 #  matching-strategy is important for spring security path matcher
 spring:
@@ -8,9 +8,9 @@ spring:
       matching-strategy: ANT_PATH_MATCHER
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
-    username: "${MYSQL_USER}"
-    password: "${MYSQL_PASSWORD}"
-    url: jdbc:mysql://${MYSQL_HOST:localhost}:${MYSQL_PORT}/${MYSQL_DB_NAME:my-notes-db}?allowPublicKeyRetrieval=true&useSSL=false&createDatabaseIfNotExist=true&serverTimezone=UTC
+    username: ${MYSQL_USER}
+    password: ${MYSQL_PASSWORD}
+    url: jdbc:mysql://${MYSQL_HOST:localhost}:${MYSQL_PORT:3309}/${MYSQL_DB_NAME:my-notes-db}?allowPublicKeyRetrieval=true&useSSL=false&createDatabaseIfNotExist=true&serverTimezone=UTC
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
 #    liquidbase:
@@ -26,5 +26,5 @@ spring:
     change-log: classpath:db/changelog/changelog-master.xml
     enabled: true
 token:
-  secret: "${TOKEN_SECRET}"
-  expiration_time: "${TOKEN_EXPIRATION_TIME:604800000}"
+  secret: ${TOKEN_SECRET:fUjXn2r5u2x/A?D(B+KbPeSgEkYp2s6v9y$B&E)H@McffTjWmZq489w!z%C*F-Jf}
+  expiration_time: ${TOKEN_EXPIRATION_TIME:604800000}

@@ -9,6 +9,7 @@ import com.mynotesapp.backend.util.Constants;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +18,7 @@ import javax.validation.Valid;
 
 @RestController
 @AllArgsConstructor
+@Slf4j
 @RequestMapping(Constants.BACKEND + Constants.USERS)
 public class UserController {
 
@@ -26,6 +28,7 @@ public class UserController {
 
     @PostMapping(Constants.REGISTER)
     public ResponseEntity<UserDto> register(@Valid @RequestBody RegisterUserDto registerDto) {
+        log.info("The endpoint for registration was reached by: {}", registerDto.getEmail());
         UserDto user = userService.register(registerDto);
 
         return ResponseEntity.ok()
@@ -35,6 +38,7 @@ public class UserController {
 
     @PostMapping(Constants.LOGIN)
     public ResponseEntity<UserDto> login(@Valid @RequestBody LoginDto loginDto) {
+        log.info("The endpoint for login was reached by: {}", loginDto.getEmail());
         UserDto user = userService.login(loginDto);
 
         return ResponseEntity.ok()
